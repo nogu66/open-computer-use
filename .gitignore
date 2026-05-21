@@ -1,0 +1,52 @@
+# Swift / SwiftPM
+.build/
+.swiftpm/
+Packages/
+Package.resolved
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+*.swiftpm/
+
+# Xcode user data
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# macOS noise
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Editor noise
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+/tmp/
+/dist/
+
+# Local dev
+.env
+.env.local
+*.local

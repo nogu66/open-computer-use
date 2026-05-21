@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest a new tool, CLI subcommand, or capability for ocu
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: |
+        Describe the use case. "I want my LLM agent to be able to X but
+        currently ocu only does Y."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: |
+        Concrete shape if you have one. New tool name, expected schema,
+        example invocation.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you considered, with their drawbacks.
+
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art
+      description: Links to similar features in other projects (Codex Computer Use, gstack browse, OpenAdapt, etc.).

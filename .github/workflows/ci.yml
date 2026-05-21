@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Test (macOS ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, macos-15]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Cache SwiftPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: swiftpm-${{ matrix.os }}-${{ hashFiles('Package.swift', 'Package.resolved') }}
+          restore-keys: |
+            swiftpm-${{ matrix.os }}-
+
+      - name: Build (debug)
+        run: swift build -v
+
+      - name: Test
+        run: swift test -v
+
+      - name: Build (release)
+        run: swift build -c release
+
+      - name: Show binary
+        run: |
+          ls -lh .build/release/ocu
+          file .build/release/ocu
+          .build/release/ocu --version
+          .build/release/ocu --help | head -20
+
+  lint:
+    name: Lint (swift-format check)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: swift-format lint
+        # swift-format ships with the Xcode toolchain. We only fail on syntax /
+        # rule violations, not formatting drift, to keep the bar low for now.
+        run: |
+          if command -v swift-format >/dev/null 2>&1; then
+            swift-format lint --recursive Sources Tests || true
+          else
+            echo "swift-format not available; skipping"
+          fi

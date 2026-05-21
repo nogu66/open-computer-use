@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag name (e.g. v0.1.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build universal binary & publish release
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            echo "name=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Build universal release binary (arm64 + x86_64)
+        run: |
+          swift build -c release --arch arm64 --arch x86_64
+          BIN_PATH=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)
+          mkdir -p dist
+          cp "$BIN_PATH/ocu" dist/ocu
+          file dist/ocu
+
+      - name: Package tarball
+        id: package
+        run: |
+          NAME="ocu-${{ steps.tag.outputs.name }}-macos-universal"
+          mkdir -p "dist/$NAME"
+          cp dist/ocu "dist/$NAME/ocu"
+          cp LICENSE "dist/$NAME/LICENSE"
+          cp README.md "dist/$NAME/README.md"
+          (cd dist && tar -czf "$NAME.tar.gz" "$NAME")
+          shasum -a 256 "dist/$NAME.tar.gz" > "dist/$NAME.tar.gz.sha256"
+          echo "tarball=dist/$NAME.tar.gz" >> "$GITHUB_OUTPUT"
+          echo "sha=dist/$NAME.tar.gz.sha256" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          generate_release_notes: true
+          files: |
+            ${{ steps.package.outputs.tarball }}
+            ${{ steps.package.outputs.sha }}

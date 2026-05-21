@@ -1,0 +1,78 @@
+name: Bug report
+description: Report a bug or unexpected behavior in OpenComputerUse (ocu)
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a report. Please fill in as much as
+        you can — minimal reproductions help us fix things faster.
+
+  - type: input
+    id: version
+    attributes:
+      label: ocu version
+      description: Output of `ocu --version`
+      placeholder: "ocu 0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "14.5 (23F79)"
+    validations:
+      required: true
+
+  - type: input
+    id: arch
+    attributes:
+      label: Architecture
+      placeholder: "arm64 / x86_64"
+    validations:
+      required: true
+
+  - type: input
+    id: host
+    attributes:
+      label: Host process (which app launches ocu)
+      description: e.g. Claude Code, Codex CLI, Cursor, Terminal, Ghostty…
+      placeholder: "Claude Code 1.0.x"
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, what actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. ocu activate --bundle-id com.google.Chrome
+        2. ocu click --bundle-id com.google.Chrome --query "Login"
+        3. …
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Output from stderr (`[ocu]` lines), or the raw JSON-RPC exchange when
+        invoked from an MCP client. Redact anything sensitive.
+      render: shell
+
+  - type: checkboxes
+    id: permissions
+    attributes:
+      label: Permissions checked
+      options:
+        - label: System Settings → Privacy & Security → **Accessibility** is enabled for the parent process
+        - label: System Settings → Privacy & Security → **Screen Recording** is enabled (if using `screenshot`)
