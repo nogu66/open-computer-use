@@ -1,6 +1,6 @@
 # Architecture
 
-OpenComputerUse (`ocu`) is a single Swift executable that can run in two modes:
+open-computer-use (`ocu`) is a single Swift executable that can run in two modes:
 
 | Mode | Invocation | stdout |
 |---|---|---|

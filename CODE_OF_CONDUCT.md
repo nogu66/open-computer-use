@@ -60,7 +60,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the maintainers via a **private GitHub issue or security advisory**
-on [github.com/nogu66/OpenComputerUse](https://github.com/nogu66/OpenComputerUse).
+on [github.com/nogu66/open-computer-use](https://github.com/nogu66/open-computer-use).
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the

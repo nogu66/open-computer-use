@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a bug or unexpected behavior in OpenComputerUse (ocu)
+description: Report a bug or unexpected behavior in open-computer-use (ocu)
 title: "[bug] "
 labels: ["bug", "triage"]
 body:

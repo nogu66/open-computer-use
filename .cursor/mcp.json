@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "open-computer-use": {
-      "command": "/Users/REPLACE_ME/.local/bin/ocu",
+      "command": "${workspaceFolder}/scripts/mcp-server.sh",
       "args": []
     }
   }

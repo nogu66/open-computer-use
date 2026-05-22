@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet.
 
-## [0.1.0] - 2026-05-21
+## [0.1.0] - 2026-05-22
 
 ### Added
 
@@ -24,7 +24,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `OCUCore` library: version metadata, CLI argument parsing, JSON-RPC helpers.
 - XCTest suite for `OCUCore` (runs in CI without Accessibility grants).
 - GitHub Actions: CI on macOS 14/15, release workflow for universal binaries.
+- Claude Code, Codex, and Cursor plugin manifests (`.claude-plugin/`, `.codex-plugin/`, `.agents/plugins/`, `.cursor/`).
+- Bundled agent skill and MCP wrapper scripts (`skills/`, `scripts/mcp-server.sh`).
+- `scripts/lib/github-release.sh` and release-first `scripts/install.sh` (default: latest GitHub Release).
 - Documentation, examples, and install/smoke-test scripts.
 
-[Unreleased]: https://github.com/nogu66/OpenComputerUse/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/nogu66/OpenComputerUse/releases/tag/v0.1.0
+### Changed
+
+- User-facing docs and examples use the `open-computer-use` name and GitHub URL consistently.
+- MCP wrappers auto-install the latest release to `~/.local/bin/ocu` when the binary is missing.
+- Release tarballs include `install.sh`.
+
+[Unreleased]: https://github.com/nogu66/open-computer-use/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/nogu66/open-computer-use/releases/tag/v0.1.0

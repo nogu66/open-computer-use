@@ -1,4 +1,4 @@
-# OpenComputerUse
+# open-computer-use
 
 <p align="right">
   <a href="README.md"><img src="https://img.shields.io/badge/English-README.md-007ACC?style=for-the-badge" alt="English README"></a>
@@ -8,14 +8,66 @@
 
 [Codex Computer Use](https://developers.openai.com/codex/app/computer-use) と同じ発想（CDP ではなく OS レベルの AX + CGEvent）を、Claude Code / Cursor / Codex など任意の MCP クライアントで使える形にしたものです。
 
-| | Playwright / CDP | **OpenComputerUse (ocu)** |
+| | Playwright / CDP | **open-computer-use (`ocu`)** |
 |---|---|---|
 | ログイン済み Chrome | 別プロファイルが多い | **そのまま操作** |
 | Cookie / SSO / 拡張 | 消えがち | **維持** |
 | 自動化検知 | `webdriver` 等 | **ブラウザ外なので該当なし** |
 | 対応 OS | クロスプラットフォーム | **macOS 13+ のみ** |
 
-## クイックスタート
+## インストール（推奨）
+
+最新の **Release バイナリ** を `~/.local/bin/ocu` に入れます。
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nogu66/open-computer-use/main/scripts/install.sh | bash
+```
+
+リポジトリを clone 済みの場合:
+
+```bash
+./scripts/install.sh              # 最新 Release（失敗時はソースビルド）
+./scripts/install.sh --version v0.1.0
+./scripts/install.sh --from-source  # SwiftPM のみ
+```
+
+`~/.local/bin` を PATH に追加してから MCP を接続:
+
+```bash
+claude mcp add open-computer-use -- $(which ocu)
+```
+
+## プラグインとしてインストール
+
+**Claude Code**、**Codex**、**Cursor** 向けプラグイン（スキル + MCP 設定）も同梱しています。先にバイナリを入れてからプラグインを追加するのがおすすめです。
+
+### Claude Code
+
+```bash
+/plugin marketplace add nogu66/open-computer-use
+/plugin install open-computer-use@open-computer-use
+/reload-plugins
+```
+
+`open-computer-use` スキルと MCP サーバー（`open-computer-use`）が同梱されます。
+
+### Codex
+
+```bash
+codex plugin marketplace add nogu66/open-computer-use
+# Codex のプラグインディレクトリから open-computer-use をインストール
+```
+
+### Cursor
+
+このリポジトリを Cursor で開くと、以下が自動的に有効になります。
+
+- MCP: [`.cursor/mcp.json`](.cursor/mcp.json)
+- スキル: [`.cursor/skills/open-computer-use/SKILL.md`](.cursor/skills/open-computer-use/SKILL.md)
+
+詳細: [examples/plugin-install.md](examples/plugin-install.md)
+
+## クイックスタート（手動ビルド）
 
 ### 必要環境
 
@@ -26,23 +78,21 @@
 ### ビルド
 
 ```bash
-git clone https://github.com/nogu66/OpenComputerUse.git
-cd OpenComputerUse
-swift build -c release
-.build/release/ocu --version
+git clone https://github.com/nogu66/open-computer-use.git
+cd open-computer-use
+./scripts/install.sh --from-source
+ocu --version
 ```
+
+### MCP 登録（手動）
 
 ```bash
-./scripts/install.sh   # release ビルド → ~/.local/bin/ocu
+claude mcp add open-computer-use -- $(which ocu)
+# 開発用 checkout（初回 MCP 接続時に latest を自動インストール）:
+claude mcp add open-computer-use -- ./scripts/mcp-server.sh
 ```
 
-### MCP 登録（Claude Code）
-
-```bash
-claude mcp add opencomputeruse -- $(which ocu)
-```
-
-Claude Code を再起動すると `mcp__opencomputeruse__list_apps` などのツールが使えます。
+Claude Code を再起動すると `mcp__open-computer-use__list_apps` などのツールが使えます。
 
 他クライアント向け設定: [examples/](examples/)
 
@@ -121,4 +171,3 @@ swift build && swift test
 ## ライセンス
 
 MIT — [LICENSE](LICENSE)
-

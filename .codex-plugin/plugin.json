@@ -1,0 +1,20 @@
+{
+  "name": "open-computer-use",
+  "version": "0.1.0",
+  "description": "macOS computer use for AI agents — control logged-in Chrome and native apps via Accessibility API and MCP",
+  "author": {
+    "name": "nogu66"
+  },
+  "repository": "https://github.com/nogu66/open-computer-use",
+  "license": "MIT",
+  "keywords": ["macos", "computer-use", "accessibility", "mcp", "browser-automation"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "open-computer-use",
+    "shortDescription": "Control your logged-in Mac apps from Codex",
+    "longDescription": "Operate the apps you already have open — logged-in Chrome, Slack, native macOS apps — via Accessibility API and synthetic input. Exposed as MCP tools and a Bash CLI.",
+    "developerName": "nogu66",
+    "category": "Productivity"
+  }
+}

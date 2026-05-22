@@ -1,0 +1,10 @@
+{
+  "name": "open-computer-use",
+  "description": "macOS computer use for AI agents — control logged-in Chrome and native apps via Accessibility API and MCP",
+  "version": "0.1.0",
+  "author": {
+    "name": "nogu66"
+  },
+  "repository": "https://github.com/nogu66/open-computer-use",
+  "license": "MIT"
+}

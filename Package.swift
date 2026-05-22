@@ -1,8 +1,8 @@
 // swift-tools-version: 5.9
 //
-// OpenComputerUse (ocu)
+// open-computer-use (ocu)
 // macOS computer use via Accessibility API + CGEvent, exposed as both an MCP
-// stdio server and a CLI. https://github.com/nogu66/OpenComputerUse
+// stdio server and a CLI. https://github.com/nogu66/open-computer-use
 //
 import PackageDescription
 

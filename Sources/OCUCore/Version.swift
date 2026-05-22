@@ -10,5 +10,5 @@ public enum OpenComputerUse {
     public static let version = "0.1.0"
 
     /// Server name advertised to MCP clients.
-    public static let serverName = "opencomputeruse"
+    public static let serverName = "open-computer-use"
 }

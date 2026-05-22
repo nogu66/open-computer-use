@@ -1,20 +1,30 @@
 # Codex CLI
 
+## Plugin (recommended)
+
+```bash
+codex plugin marketplace add nogu66/open-computer-use
+```
+
+Then install **open-computer-use** from the Codex plugin directory.
+
+See [plugin-install.md](plugin-install.md).
+
 ## Installed binary
 
 ```bash
-codex mcp add opencomputeruse $(which ocu)
+curl -fsSL https://raw.githubusercontent.com/nogu66/open-computer-use/main/scripts/install.sh | bash
+codex mcp add open-computer-use $(which ocu)
 ```
 
 ## Dev checkout
 
 ```bash
-codex mcp add opencomputeruse \
-  swift /path/to/OpenComputerUse/.build/release/ocu
+codex mcp add open-computer-use \
+  /path/to/open-computer-use/scripts/mcp-server.sh
 ```
 
-Some Codex versions expect the command as a single executable path; prefer the
-release binary from `swift build -c release` over `swift run` for faster startup.
+The wrapper resolves `~/.local/bin/ocu` or auto-installs the latest release on first use.
 
 ## Verify
 

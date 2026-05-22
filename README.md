@@ -1,4 +1,4 @@
-# OpenComputerUse
+# open-computer-use
 
 <p align="right">
   <a href="README.ja.md"><img src="https://img.shields.io/badge/日本語-README.ja.md-007ACC?style=for-the-badge" alt="日本語版 README"></a>
@@ -8,45 +8,98 @@
 
 Inspired by [Codex Computer Use](https://developers.openai.com/codex/app/computer-use): same idea (OS-level AX + CGEvent, not CDP), packaged for Claude Code, Cursor, Codex, and any MCP client.
 
-| | Playwright / CDP | **OpenComputerUse (ocu)** |
+| | Playwright / CDP | **open-computer-use (`ocu`)** |
 |---|---|---|
 | Uses your logged-in Chrome profile | Usually no (separate profile) | **Yes** — operates the real app |
 | Cookie / SSO / extensions | Often lost | **Preserved** |
 | `navigator.webdriver` | May be set | **Not applicable** (not in the browser) |
 | Platform | Cross-platform | **macOS 13+ only** |
 
-## Quick start
+## Install (recommended)
+
+Install the latest **release binary** to `~/.local/bin/ocu`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nogu66/open-computer-use/main/scripts/install.sh | bash
+```
+
+From a checkout:
+
+```bash
+./scripts/install.sh              # latest GitHub Release (falls back to source build)
+./scripts/install.sh --version v0.1.0
+./scripts/install.sh --from-source  # SwiftPM build only
+```
+
+Ensure `~/.local/bin` is on your `PATH`, then wire MCP:
+
+```bash
+claude mcp add open-computer-use -- $(which ocu)
+```
+
+## Install as a plugin
+
+This repository also ships as a plugin for **Claude Code**, **Codex**, and **Cursor** (skill + MCP config). Install the binary first (above), then add the plugin so agents get the skill and MCP wiring.
+
+### Claude Code
+
+```bash
+/plugin marketplace add nogu66/open-computer-use
+/plugin install open-computer-use@open-computer-use
+/reload-plugins
+```
+
+The plugin bundles the `open-computer-use` skill and an MCP server (`open-computer-use`).
+
+### Codex
+
+```bash
+codex plugin marketplace add nogu66/open-computer-use
+# then install open-computer-use from the plugin directory in Codex
+```
+
+Repo-scoped marketplace file: [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json).  
+Codex-native manifest: [`.codex-plugin/plugin.json`](.codex-plugin/plugin.json).
+
+### Cursor
+
+Clone or open this repo in Cursor. Project-level config is included:
+
+- MCP: [`.cursor/mcp.json`](.cursor/mcp.json) → `scripts/mcp-server.sh`
+- Skill: [`.cursor/skills/open-computer-use/SKILL.md`](.cursor/skills/open-computer-use/SKILL.md)
+
+Restart Cursor or reload MCP. On first connect, `mcp-server.sh` can auto-install the latest release if `ocu` is missing.
+
+For other projects, copy the skill to `~/.cursor/skills/open-computer-use/` and point MCP at `scripts/mcp-server.sh` from your checkout, or at `$(which ocu)` after `./scripts/install.sh`.
+
+See [examples/plugin-install.md](examples/plugin-install.md) for details and troubleshooting.
+
+## Quick start (manual build)
 
 ### Requirements
 
 - macOS 13 (Ventura) or later
-- Swift 5.9+ (Xcode 15+) to build from source
+- Swift 5.9+ (Xcode 15+) only if building from source
 - **Accessibility** permission for the process that launches `ocu` (Terminal, Ghostty, Claude Code, Cursor, …)
 
 ### Build from source
 
 ```bash
-git clone https://github.com/nogu66/OpenComputerUse.git
-cd OpenComputerUse
-swift build -c release
-.build/release/ocu --version
+git clone https://github.com/nogu66/open-computer-use.git
+cd open-computer-use
+./scripts/install.sh --from-source
+ocu --version
 ```
 
-Or use the install helper:
+### MCP setup (manual)
 
 ```bash
-./scripts/install.sh          # builds release → ~/.local/bin/ocu
+claude mcp add open-computer-use -- $(which ocu)
+# or, from a dev checkout (auto-installs latest release on first MCP start):
+claude mcp add open-computer-use -- ./scripts/mcp-server.sh
 ```
 
-### MCP setup (Claude Code)
-
-```bash
-claude mcp add opencomputeruse -- $(which ocu)
-# or, from a dev checkout:
-claude mcp add opencomputeruse -- swift run -c release --package-path /path/to/OpenComputerUse ocu
-```
-
-Restart Claude Code. You should see tools like `mcp__opencomputeruse__list_apps`, `get_ax_tree`, `click_element`, etc.
+Restart Claude Code. You should see tools like `mcp__open-computer-use__list_apps`, `get_ax_tree`, `click_element`, etc.
 
 See [examples/](examples/) for Cursor, Codex, and raw `mcp.json` snippets.
 

@@ -48,8 +48,10 @@ jobs:
           cp dist/ocu "dist/$NAME/ocu"
           cp LICENSE "dist/$NAME/LICENSE"
           cp README.md "dist/$NAME/README.md"
+          cp scripts/install.sh "dist/$NAME/install.sh"
+          chmod +x "dist/$NAME/install.sh"
           (cd dist && tar -czf "$NAME.tar.gz" "$NAME")
-          shasum -a 256 "dist/$NAME.tar.gz" > "dist/$NAME.tar.gz.sha256"
+          shasum -a 256 "dist/$NAME.tar.gz" | awk -v name="$NAME.tar.gz" '{print $1 "  " name}' > "dist/$NAME.tar.gz.sha256"
           echo "tarball=dist/$NAME.tar.gz" >> "$GITHUB_OUTPUT"
           echo "sha=dist/$NAME.tar.gz.sha256" >> "$GITHUB_OUTPUT"
 

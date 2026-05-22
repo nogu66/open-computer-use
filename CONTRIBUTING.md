@@ -1,4 +1,4 @@
-# Contributing to OpenComputerUse
+# Contributing to open-computer-use
 
 Thanks for your interest in improving `ocu`. This document covers the
 basics; the bar for first-time contributors is low — typo fixes and small
@@ -27,8 +27,8 @@ Requirements:
 - Swift 5.9+ (Xcode 15+)
 
 ```bash
-git clone https://github.com/nogu66/OpenComputerUse.git
-cd OpenComputerUse
+git clone https://github.com/nogu66/open-computer-use.git
+cd open-computer-use
 swift build
 swift test
 .build/debug/ocu --help
@@ -55,9 +55,14 @@ the grant unless the binary is renamed.
 │   ├── OCUCore/                   pure, testable helpers (no AppKit/AX deps)
 │   └── ocu/                       executable; everything that touches macOS APIs
 ├── Tests/OCUCoreTests/            XCTest, runs in CI without UI permissions
+├── .claude-plugin/               Claude Code plugin + marketplace
+├── .codex-plugin/                Codex plugin manifest
+├── .agents/plugins/              Codex repo marketplace
+├── .cursor/                      Cursor MCP + skill
+├── skills/                       shared agent skill (plugin bundle)
 ├── docs/                          permissions / architecture / tool reference
-├── examples/                      MCP client configs (Claude Code, Codex)
-├── scripts/                       install / smoke-test
+├── examples/                      MCP / plugin install examples
+├── scripts/                       install / smoke-test / plugin wrappers
 └── .github/                       CI, issue & PR templates
 ```
 

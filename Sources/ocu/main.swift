@@ -1,6 +1,6 @@
 //
-//  ocu — OpenComputerUse
-//  https://github.com/nogu66/OpenComputerUse
+//  ocu — open-computer-use
+//  https://github.com/nogu66/open-computer-use
 //
 //  Acts as either:
 //    * an MCP stdio server (no args, or `ocu serve`), or
@@ -710,8 +710,8 @@ func cliParseArgs(_ args: [String]) -> (positional: [String], opts: [String: Str
 
 func cliPrintHelp() {
     let help = """
-    OpenComputerUse (ocu) v\(OpenComputerUse.version) — macOS computer use
-    via Accessibility + CGEvent. https://github.com/nogu66/OpenComputerUse
+    open-computer-use (ocu) v\(OpenComputerUse.version) — macOS computer use
+    via Accessibility + CGEvent. https://github.com/nogu66/open-computer-use
 
     USAGE:
       ocu <subcommand> [options]
@@ -896,7 +896,7 @@ if !AXIsProcessTrustedWithOptions(promptOpts) {
     log("Accessibility 権限が必要")
 }
 
-log("OpenComputerUse MCP server started (stdio) v\(OpenComputerUse.version)")
+log("open-computer-use MCP server started (stdio) v\(OpenComputerUse.version)")
 
 while let line = readLine() {
     guard let data = line.data(using: .utf8),
