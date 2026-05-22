@@ -1,8 +1,14 @@
 {
   "mcpServers": {
     "open-computer-use": {
-      "command": "${CLAUDE_PLUGIN_ROOT}/scripts/mcp-server.sh",
-      "args": []
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${CLAUDE_PLUGIN_ROOT}/scripts/mcp-server.ps1"
+      ]
     }
   }
 }

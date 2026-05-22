@@ -66,3 +66,23 @@ jobs:
           else
             echo "swift-format not available; skipping"
           fi
+
+  windows-smoke:
+    name: Windows PowerShell smoke
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JSON configs
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse -Filter *.json |
+            ForEach-Object {
+              Get-Content -Raw -LiteralPath $_.FullName | ConvertFrom-Json | Out-Null
+              Write-Host "OK $($_.FullName)"
+            }
+
+      - name: Run Windows MCP smoke test
+        shell: powershell
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\smoke-test-windows.ps1

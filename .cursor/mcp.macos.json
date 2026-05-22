@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "open-computer-use": {
+      "command": "${workspaceFolder}/scripts/mcp-server.sh",
+      "args": []
+    }
+  }
+}

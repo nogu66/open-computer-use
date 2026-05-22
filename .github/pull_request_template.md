@@ -18,6 +18,7 @@
 
 - [ ] `swift build` passes
 - [ ] `swift test` passes
+- [ ] Windows smoke passes (`scripts\smoke-test-windows.ps1`) if Windows-facing
 - [ ] Manually exercised on macOS (describe steps)
 
 ## Screenshots / transcripts (optional)

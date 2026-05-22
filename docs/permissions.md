@@ -3,6 +3,12 @@
 `ocu` controls the Mac like assistive technology: it reads the accessibility
 tree and posts low-level events. macOS gates that behind explicit user consent.
 
+On Windows, this fork uses Microsoft UI Automation from Windows PowerShell. It
+does not need a separate install-time permission prompt, but it is still bound
+by Windows integrity and session boundaries. It may not control elevated apps
+from a non-elevated agent, apps running as a different user, protected system
+surfaces, or controls that do not expose a useful UI Automation tree.
+
 ## Accessibility (required)
 
 **Used for:** `get_ax_tree`, `find_element`, `click_element`, `click_ref`,
