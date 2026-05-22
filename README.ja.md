@@ -1,8 +1,5 @@
-# open-computer-use
-
-<p align="right">
-  <a href="README.md"><img src="https://img.shields.io/badge/English-README.md-007ACC?style=for-the-badge" alt="English README"></a>
-</p>
+# OpenComputerUse
+<a href="README.md">English</a>
 
 **macOS 向け Computer Use** — すでにログイン済みの Chrome やネイティブアプリを、Accessibility API と合成入力で操作し、MCP stdio サーバーと CLI として公開します。
 

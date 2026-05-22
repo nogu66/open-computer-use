@@ -1,8 +1,6 @@
-# open-computer-use
+# OpenComputerUse
 
-<p align="right">
-  <a href="README.ja.md"><img src="https://img.shields.io/badge/日本語-README.ja.md-007ACC?style=for-the-badge" alt="日本語版 README"></a>
-</p>
+<a href="README.ja.md">日本語</a>
 
 **macOS computer use for AI agents** — control the apps you already have open (logged-in Chrome, Slack, native apps) via the Accessibility API and synthetic input, exposed as an MCP stdio server and a small CLI.
 
