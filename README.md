@@ -2,7 +2,13 @@
 
 <a href="README.ja.md">日本語</a>
 
-**macOS computer use for AI agents** — control the apps you already have open (logged-in Chrome, Slack, native apps) via the Accessibility API and synthetic input, exposed as an MCP stdio server and a small CLI.
+**Desktop computer use for AI agents** - control the apps you already have open (logged-in Chrome, Slack, native apps) via native accessibility APIs, exposed as an MCP stdio server and a small CLI.
+
+This repository keeps the original macOS Accessibility API path and adds a Windows
+path based on Microsoft UI Automation. Windows input is guarded by default:
+dangerous shell text, recursive deletion, file modification commands, encoded
+PowerShell, and delete-like UI labels are blocked unless the operator explicitly
+enables the two-step unsafe override.
 
 Inspired by [Codex Computer Use](https://developers.openai.com/codex/app/computer-use): same idea (OS-level AX + CGEvent, not CDP), packaged for Claude Code, Cursor, Codex, and any MCP client.
 
@@ -11,7 +17,24 @@ Inspired by [Codex Computer Use](https://developers.openai.com/codex/app/compute
 | Uses your logged-in Chrome profile | Usually no (separate profile) | **Yes** — operates the real app |
 | Cookie / SSO / extensions | Often lost | **Preserved** |
 | `navigator.webdriver` | May be set | **Not applicable** (not in the browser) |
-| Platform | Cross-platform | **macOS 13+ only** |
+| Platform | Cross-platform | **Windows 10/11 + macOS 13+** |
+
+## Windows quick start
+
+From this checkout on Windows:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\smoke-test-windows.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\ocu-windows.ps1 apps
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\ocu-windows.ps1 tree --depth 1 --max-nodes 20
+```
+
+Cursor is wired by `.cursor/mcp.json`. Codex/plugin MCP uses `.mcp.json`.
+Both call `scripts/mcp-server.ps1`, which starts the PowerShell/MS UI Automation
+server. macOS configs are kept as `.cursor/mcp.macos.json` and `.mcp.macos.json`.
+
+See [docs/windows-msuia.md](docs/windows-msuia.md) for Windows setup, safety
+policy details, and Codex/Cursor JSON snippets.
 
 ## Install (recommended)
 
@@ -63,12 +86,12 @@ Codex-native manifest: [`.codex-plugin/plugin.json`](.codex-plugin/plugin.json).
 
 Clone or open this repo in Cursor. Project-level config is included:
 
-- MCP: [`.cursor/mcp.json`](.cursor/mcp.json) → `scripts/mcp-server.sh`
+- MCP: [`.cursor/mcp.json`](.cursor/mcp.json) -> `scripts/mcp-server.ps1` on Windows. The macOS config is kept as [`.cursor/mcp.macos.json`](.cursor/mcp.macos.json).
 - Skill: [`.cursor/skills/open-computer-use/SKILL.md`](.cursor/skills/open-computer-use/SKILL.md)
 
-Restart Cursor or reload MCP. On first connect, `mcp-server.sh` can auto-install the latest release if `ocu` is missing.
+Restart Cursor or reload MCP. On macOS, use `.cursor/mcp.macos.json`; `mcp-server.sh` can auto-install the latest release if `ocu` is missing.
 
-For other projects, copy the skill to `~/.cursor/skills/open-computer-use/` and point MCP at `scripts/mcp-server.sh` from your checkout, or at `$(which ocu)` after `./scripts/install.sh`.
+For other projects, copy the skill to `~/.cursor/skills/open-computer-use/`. On Windows, point MCP at `scripts/mcp-server.ps1` with `powershell.exe`. On macOS, point MCP at `scripts/mcp-server.sh` from your checkout, or at `$(which ocu)` after `./scripts/install.sh`.
 
 See [examples/plugin-install.md](examples/plugin-install.md) for details and troubleshooting.
 

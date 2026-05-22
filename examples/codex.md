@@ -26,10 +26,40 @@ codex mcp add open-computer-use \
 
 The wrapper resolves `~/.local/bin/ocu` or auto-installs the latest release on first use.
 
+## Windows dev checkout
+
+Use the PowerShell/MS UI Automation server:
+
+```json
+{
+  "mcpServers": {
+    "open-computer-use": {
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:/Users/downl/Desktop/open-computer-use/scripts/mcp-server.ps1"
+      ]
+    }
+  }
+}
+```
+
+Windows safety guardrails block destructive typed commands, unsafe clipboard
+pastes, Enter after unsafe key-by-key commands, and delete-like UI labels.
+
 ## Verify
 
 ```bash
 ./scripts/smoke-test.sh
+```
+
+On Windows:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\smoke-test-windows.ps1
 ```
 
 ## Note on Codex Computer Use

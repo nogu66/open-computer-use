@@ -1,6 +1,7 @@
 # Architecture
 
-open-computer-use (`ocu`) is a single Swift executable that can run in two modes:
+open-computer-use (`ocu`) keeps the original macOS Swift executable and adds a
+Windows PowerShell/MS UI Automation server in this fork. Both run in two modes:
 
 | Mode | Invocation | stdout |
 |---|---|---|
@@ -23,6 +24,16 @@ Package.swift
 
 Permission-sensitive code lives only in `Sources/ocu/main.swift`. Pure helpers
 belong in `OCUCore` with matching tests under `Tests/OCUCoreTests/`.
+
+Windows-specific code lives in `scripts/ocu-windows.ps1`, launched for MCP by
+`scripts/mcp-server.ps1`. It uses Microsoft UI Automation for element discovery
+and control patterns, then falls back to Win32 pointer/key helpers when a UIA
+pattern is unavailable.
+
+`Package.swift` defines the Swift `ocu` executable target only when the manifest
+is evaluated on macOS. On Windows, SwiftPM exposes `OCUCore` and
+`OCUCoreTests`, allowing Windows Swift build/test coverage for the pure library
+without importing `AppKit` or `ApplicationServices`.
 
 ## Control flow (MCP)
 
@@ -83,7 +94,8 @@ Trade-offs:
 
 - Slower and noisier than DOM selectors for web-only tasks
 - Substring search can match the wrong element when labels repeat
-- macOS-only; no Linux/Windows support planned
+- Windows support is now provided through the PowerShell/MS UI Automation path;
+  Linux remains unsupported.
 
 ## CI vs local dev
 

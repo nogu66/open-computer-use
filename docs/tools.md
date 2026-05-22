@@ -3,6 +3,11 @@
 All tools return MCP `content` blocks. Errors set `isError: true` with a text
 explanation. Unless noted, call `activate` on the target app before typing keys.
 
+On Windows, the same MCP tool names are served by `scripts/ocu-windows.ps1` using
+Microsoft UI Automation. Windows accepts `app_id`, `process_name`, `pid`, and
+`title`; `bundle_id` remains accepted as an alias for MCP clients already shaped
+around the macOS schema. See [windows-msuia.md](windows-msuia.md).
+
 ## `list_apps`
 
 List running applications with `NSWorkspace` (regular apps only).

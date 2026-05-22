@@ -9,7 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Nothing yet.
+- Windows MCP/CLI path using PowerShell and Microsoft UI Automation.
+- Guardrails for destructive typed commands, unsafe paste, file modification
+  commands, recursive deletion, and delete-like UI labels on Windows.
+- Windows MCP smoke test script and GitHub Actions Windows smoke job.
+
+### Changed
+
+- `Package.swift` now exposes the macOS `ocu` executable target only on macOS so
+  `OCUCore` can build and test on Windows.
 
 ## [0.1.0] - 2026-05-22
 

@@ -1,6 +1,6 @@
 {
   "name": "open-computer-use",
-  "description": "macOS computer use for AI agents — control logged-in Chrome and native apps via Accessibility API and MCP",
+  "description": "Windows and macOS computer use for AI agents via Microsoft UI Automation or macOS Accessibility API",
   "version": "0.1.0",
   "author": {
     "name": "nogu66"

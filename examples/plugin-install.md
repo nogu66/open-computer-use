@@ -2,7 +2,7 @@
 
 Install **open-computer-use** as a plugin for Claude Code, Codex, or Cursor. Each path bundles:
 
-- MCP server (`scripts/mcp-server.sh` → `ocu` stdio)
+- MCP server (`scripts/mcp-server.ps1` on Windows, `scripts/mcp-server.sh` -> `ocu` stdio on macOS)
 - Agent skill (`skills/open-computer-use/SKILL.md`)
 
 ## 1. Install the binary (do this first)
@@ -79,6 +79,10 @@ codex plugin marketplace add /path/to/open-computer-use
 Manifest: [`.codex-plugin/plugin.json`](../.codex-plugin/plugin.json)  
 Repo marketplace (Codex): [`.agents/plugins/marketplace.json`](../.agents/plugins/marketplace.json)
 
+On Windows, `.mcp.json` launches `scripts/mcp-server.ps1` with
+`powershell.exe` and Microsoft UI Automation. The previous macOS MCP config is
+kept as [`.mcp.macos.json`](../.mcp.macos.json).
+
 ## Cursor
 
 **Option A — open this repo in Cursor**
@@ -90,10 +94,13 @@ Project files are already wired:
 
 Restart Cursor or reload MCP.
 
+On Windows, `.cursor/mcp.json` uses `scripts/mcp-server.ps1`. The previous
+macOS project config is kept as [`.cursor/mcp.macos.json`](../.cursor/mcp.macos.json).
+
 **Option B — use from any project**
 
-1. Install binary: `curl -fsSL …/scripts/install.sh | bash`
-2. Add to user MCP config (`~/.cursor/mcp.json`):
+1. Install binary on macOS: `curl -fsSL .../scripts/install.sh | bash`
+2. Add to user MCP config (`~/.cursor/mcp.json`) on macOS:
 
 ```json
 {
@@ -119,6 +126,25 @@ Or keep the wrapper for auto-install on first connect:
 }
 ```
 
+On Windows, point Cursor at the PowerShell server instead:
+
+```json
+{
+  "mcpServers": {
+    "open-computer-use": {
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:/Users/YOU/open-computer-use/scripts/mcp-server.ps1"
+      ]
+    }
+  }
+}
+```
+
 3. Copy the skill: `cp -R ~/open-computer-use/skills/open-computer-use ~/.cursor/skills/`
 
 ## Permissions (all clients)
@@ -133,6 +159,12 @@ See [docs/permissions.md](../docs/permissions.md).
 ```bash
 ocu --version
 ./scripts/smoke-test.sh
+```
+
+On Windows:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\smoke-test-windows.ps1
 ```
 
 Or ask the agent to call `list_apps` via MCP.

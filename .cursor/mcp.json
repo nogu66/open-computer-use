@@ -1,8 +1,14 @@
 {
   "mcpServers": {
     "open-computer-use": {
-      "command": "${workspaceFolder}/scripts/mcp-server.sh",
-      "args": []
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/mcp-server.ps1"
+      ]
     }
   }
 }

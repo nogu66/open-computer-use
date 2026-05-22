@@ -1,13 +1,33 @@
 ---
 name: open-computer-use
-description: Use whenever the user wants to control a macOS GUI app — clicking buttons, reading on-screen content, typing into open windows, or operating their logged-in browser. Triggers on "Chrome を操作", "ログイン済みのブラウザで", "Mac アプリを動かして", "ocu", "computer use", "operate the browser". Prefer over Playwright when login state, cookies, SSO, passkeys, or extensions matter.
+description: Use whenever the user wants to control a real desktop GUI app through MCP or CLI. On Windows use Microsoft UI Automation via scripts/ocu-windows.ps1; on macOS use the Swift Accessibility API binary. Prefer when login state, cookies, SSO, passkeys, extensions, or native app state matter.
 ---
 
 # open-computer-use (`ocu`)
 
-macOS Accessibility API + CGEvent + `screencapture` packaged as one CLI/MCP binary. Model-agnostic: works from any agent that can call Bash or MCP.
+Desktop computer use through native accessibility APIs.
 
-## Install (latest release)
+- Windows: PowerShell + Microsoft UI Automation (`scripts/ocu-windows.ps1`)
+- macOS: Swift + Accessibility API + CGEvent + `screencapture`
+
+## Windows
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\smoke-test-windows.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\ocu-windows.ps1 apps
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\ocu-windows.ps1 tree --app-id chrome --depth 8
+```
+
+Windows MCP is launched with:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\mcp-server.ps1
+```
+
+Use `app_id`, `process_name`, `pid`, or `title`. `bundle_id` is still accepted as
+an alias for clients that reuse the macOS schema.
+
+## macOS
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nogu66/open-computer-use/main/scripts/install.sh | bash
@@ -15,85 +35,41 @@ export PATH="$HOME/.local/bin:$PATH"
 ocu --version
 ```
 
-Pinned version: `OCU_VERSION=v0.1.0 ./scripts/install.sh`  
-Source build only: `./scripts/install.sh --from-source`
+## Core workflow
 
-## Binary resolution
+1. `list_apps` / `apps` to identify the target.
+2. `activate` before typing.
+3. `get_ax_tree` / `tree` or `ax_tree_json` to inspect visible UI.
+4. Use `click_element`, `click_ref`, `type_text`, `key_press`, `wait_for`, and `screenshot`.
+5. Verify visually when labels are ambiguous.
 
-When installed as a plugin, prefer the bundled wrapper:
+## Windows safety policy
 
-```bash
-OCU="${CLAUDE_PLUGIN_ROOT}/scripts/ocu-cli.sh"
-# Codex also sets PLUGIN_ROOT; Cursor project checkout:
-# OCU="$(git rev-parse --show-toplevel)/scripts/ocu-cli.sh"
+The Windows path blocks risky desktop input by default:
+
+- destructive Unix commands such as `rm -rf`
+- Windows recursive deletion such as `Remove-Item -Recurse`, `del /s`, and `rd /s`
+- file write or move commands such as `Set-Content`, `Out-File`, and `Move-Item`
+- destructive Git cleanup such as `git reset --hard` and `git clean -fd`
+- remote script piping such as `curl ... | sh`
+- encoded PowerShell commands
+- delete-like UI labels such as `delete`, `remove`, `format`, `削除`, and `消去`
+
+The guard is applied to `type_text`, `clip_set`, paste shortcuts, Enter after
+key-by-key typed input, `click_element`, `right_click`, `menu`, and `click_ref`.
+
+Unsafe override requires both:
+
+```powershell
+$env:OCU_ALLOW_UNSAFE_INPUT = "1"
 ```
 
-After install:
-
-```bash
-OCU="$(command -v ocu)"
-```
-
-Wrappers auto-install the latest release to `~/.local/bin/ocu` on first use unless `OCU_SKIP_AUTO_INSTALL=1`.
-
-## When to use
-
-- Logged-in Chrome, Gmail, Notion, Slack, banking sites
-- Native Mac apps without APIs (Notes, System Settings, etc.)
-- Reading what is actually on screen
-- Avoiding bot detection (no CDP, no new browser profile)
+and `allow_unsafe=true` in the tool call or `--allow-unsafe` in the CLI.
 
 ## When not to use
 
-- Fresh-profile scraping only → Playwright
-- Public HTML fetch only → WebFetch / curl
-- Service has a stable API → use the API
-
-## Core workflow
-
-```bash
-$OCU apps
-$OCU activate --bundle-id com.google.Chrome
-$OCU tree --bundle-id com.google.Chrome --depth 8
-$OCU click --bundle-id com.google.Chrome --query "Address and search bar"
-$OCU type --text "https://example.com"
-$OCU key --key return
-$OCU shot --bundle-id com.google.Chrome --out /tmp/after.png
-```
-
-## Subcommands
-
-| Command | Purpose |
-|---|---|
-| `apps` | List GUI apps (bundle ID + PID) |
-| `activate --bundle-id <id>` | Bring app to front (**call first**) |
-| `tree --bundle-id <id> [--depth N]` | AX tree; add `--json` for structured output |
-| `find --bundle-id <id> --query <q>` | Substring match on AX labels |
-| `wait --bundle-id <id> --query <q> [--timeout SEC]` | Poll until element appears |
-| `click` / `rclick` | Left / right click by `--query` |
-| `type --text <s>` | Type into focused field |
-| `key --key <name> [--mods cmd,shift,alt,ctrl]` | Key press |
-| `scroll` | Scroll at element or cursor |
-| `menu --bundle-id <id> --path <p>` | Menubar path, e.g. `"File/New Tab"` |
-| `shot [--bundle-id <id>] [--out <path>]` | Screenshot PNG |
-| `clip get` / `clip set --text <s>` | Clipboard |
-
-## MCP vs CLI
-
-Same binary. Plugin install exposes MCP tools (`list_apps`, `get_ax_tree`, `click_element`, …). Bash agents use the CLI subcommands above.
-
-Direct MCP (no wrapper):
-
-```bash
-claude mcp add open-computer-use -- $(command -v ocu)
-```
-
-## Pitfalls
-
-- Always `activate` first — otherwise `type`/`key` leak to the terminal
-- Prefer `menu` over `Cmd+T` when Chrome is playing video (keys may be captured)
-- `find`/`click` return the first match — narrow queries or inspect `tree` first
-- CLI mode has no `@eN` refs — use `--query` (MCP `click_ref` uses refs from last tree)
-- Grant **Accessibility** (and **Screen Recording** for screenshots) to the parent app (Claude Code, Cursor, Codex, Terminal)
+- Public HTML fetch only: use web fetch or curl.
+- A stable official API exists: use the API.
+- The target is elevated or a different Windows user session: UI Automation may be blocked.
 
 Repository: https://github.com/nogu66/open-computer-use
