@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "win-computer-use": {
+      "command": "C:\\path\\to\\wcu.exe",
+      "args": ["serve"]
+    }
+  }
+}
